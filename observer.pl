@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.9 2000-08-15 08:23:31 thof Exp $
+# $Id: observer.pl,v 1.10 2003-05-09 08:42:32 tforb Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -23,13 +23,14 @@
 #    07/03/00   V1.5   now reports new lines
 #    31/07/00   V1.6   now uses /bin/bash as su login shell
 #    15/08/00   V1.7   day-value in tm struct has range from 1 to 31
+#    09/05/03   V1.8   logger now sits in /bin
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.7   central service";
+$VERSION="OBSERVER   V1.8   central service";
 
 # called program name
 # -------------------
@@ -59,7 +60,7 @@ $STATUS_OK     ="O";
 $binECHO    ="/bin/echo";
 $binSU      ="/bin/su";
 $binBASH    ="/bin/bash";
-$binLOGGER  ="/usr/bin/logger";
+$binLOGGER  ="/bin/logger";
 $binMAIL    ="/usr/bin/mail";
 #
 # ----------------------------------------------------------------------------
