@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is <observer_twrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_twrap.sh,v 1.3 2003-06-22 16:08:27 tforb Exp $
+# $Id: observer_twrap.sh,v 1.4 2003-08-19 07:16:50 tforb Exp $
 # 
 # Copyright (c) 2003 by Thomas Forbriger (BFO Schiltach) 
 # 
@@ -9,6 +9,7 @@
 # 
 # REVISIONS and CHANGES 
 #    22/06/2003   V1.0   Thomas Forbriger
+#    19/08/2003   V1.1   allow us to watch the progress
 # 
 # ============================================================================
 #
@@ -51,7 +52,7 @@ export  OBS_STATUS_ALERT="$OBS_KEY_STATUS $OBS_KEY_ALERT"
 
 OBS_WRAP_OUTLOG=$OBS_LOG_DIR/stderr.out
 
-echo "This is "'$Id: observer_twrap.sh,v 1.3 2003-06-22 16:08:27 tforb Exp $'
+echo "This is "'$Id: observer_twrap.sh,v 1.4 2003-08-19 07:16:50 tforb Exp $'
 echo "======================================================================"
 echo "wrapped plugin: $OBS_WRAP_PLUGIN"
 echo
@@ -67,8 +68,15 @@ echo
 /bin/rm -fv $OBS_WRAP_OUTLOG $OBS_LOG
 OBS_WRAP_START=$(date)
 /bin/mkdir -pv $OBS_WRAP_LOGDIR
-echo "$OBS_WRAP_PLUGIN >$OBS_WRAP_OUTLOG 2>&1"
-$OBS_WRAP_PLUGIN >$OBS_WRAP_OUTLOG 2>&1
+
+if test $# -gt 1
+then 
+  echo "$OBS_WRAP_PLUGIN 2>&1 | tee $OBS_WRAP_OUTLOG"
+  $OBS_WRAP_PLUGIN 2>&1 | tee $OBS_WRAP_OUTLOG
+else
+  echo "$OBS_WRAP_PLUGIN >$OBS_WRAP_OUTLOG 2>&1"
+  $OBS_WRAP_PLUGIN >$OBS_WRAP_OUTLOG 2>&1
+fi 
 OBS_WRAP_FINISH=$(date)
 
 # report
