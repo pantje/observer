@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.1 2000-02-21 15:06:58 thof Exp $
+# $Id: observer.pl,v 1.2 2000-02-21 15:32:29 thof Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -17,13 +17,15 @@
 #    19/01/00   V1.0   first released Version
 #    21/01/00   V1.1   introduced report level check for mail
 #    25/01/00   V1.2   changed reporting scheme
+#    21/02/00   V1.3   changed differences reporting scheme
+#                      (was not working in former version)
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.2   central service";
+$VERSION="OBSERVER   V1.3   central service";
 
 # called program name
 # -------------------
@@ -380,16 +382,30 @@ if (-r $LOG_PREVSTATUS) {
     @PREVIOUS_STATUS=(<PREVSTATUS>);
     close(PREVSTATUS);
     chomp(@PREVIOUS_STATUS);
-# compare
-    foreach $stline (map { s/[\*\?\+]// } sort (@STATUS_FILE)) {
+# create a working copy of the current status
+    @current_status=@STATUS_FILE;
+# take each line of previous status
+    foreach $stline (sort (@PREVIOUS_STATUS)) {
+# remember line and remove meta characters
+      $orline = $stline;
+      $stline =~ tr/*.?+//d;
 ##      print "$stline\n";
-      @matching=grep { /$stline/ } map { s/[\*\?\+]// } (@PREVIOUS_STATUS);
+# search for this pattern in current status
+# the extra '$_' is necessary as map evaluates in list context
+# without map would return the number of tr-substitutions
+      @matching=grep { m/^$stline$/ } map { tr/*.?+//d; $_; } (@current_status);
 ##      print "$#matching\n";
       if ($#matching < 0) {
-        push @STATUS_DIFF, $stline;
+        push @STATUS_DIFF, $orline;
       }
     }
-    if ($#STATUS_DIFF < 0) { @STATUS_DIFF="none"; }
+# so, are there any differences now?
+    if ($#STATUS_DIFF < 0) {
+      $DIFFERENCES=0;
+      @STATUS_DIFF="none"; i
+    } else {
+      $DIFFERENCES=1;
+    }
   } else {
     @STATUS_DIFF=("could not open $LOG_PREVSTATUS: $!");
     ERRLOG(@STATUS_DIFF);
@@ -480,13 +496,26 @@ if ($mail_level_indices =~ m/$master_level_index/) {
    "Client status messages:",
    "=======================",
    sprintf("%.10s: Exit status (%s: OK; %s: NOTICE; %s: ALERT)",
-     "S", $STATUS_OK, $STATUS_NOTICE, $STATUS_ALERT), " ",
-   @STATUS_HEAD, @STLINES_ALERT, @STLINES_NOTICE, @STLINES_OK,
-   "Differences to previous run:",
-   "(i.e. lines that appeared in previous one but not in this one)",
-   @STATUS_HEAD, @STATUS_DIFF, " ",
-   "Reports from client services:",
-   "=============================", @OUTPUT_REPORT);
+     "S", $STATUS_OK, $STATUS_NOTICE, $STATUS_ALERT), " ");
+
+if ($DIFFERENCES) {
+  push @OBSERVER_REPORT,
+    ("DIFFERENCES TO PREVIOUS RUN:",
+     "(i.e. lines that appeared in previous one but not in this one)",
+     @STATUS_HEAD, @STATUS_DIFF, " ", "This run:");
+}
+
+push @OBSERVER_REPORT,
+  (@STATUS_HEAD, @STLINES_ALERT, @STLINES_NOTICE, @STLINES_OK);
+
+if (! $DIFFERENCES) {
+  push @OBSERVER_REPORT,
+  (" ","No differences to previous run...");
+}
+
+push @OBSERVER_REPORT, (" ", 
+  "Reports from client services:",
+  "=============================", @OUTPUT_REPORT);
 
 # write full report
 # -----------------
