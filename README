@@ -1,0 +1,117 @@
+Observer Service Tool (Jan. 2000 Thomas Forbriger IfG Stuttgart)
+=====================
+
+   observer.cfg
+
+   observer.pl*
+   observer.hourly.pl -> observer.pl*
+   observer.daily.pl -> observer.pl*
+   observer.weekly.pl -> observer.pl*
+   observer.monthly.pl -> observer.pl*
+
+   observer_mkdir.pl*
+
+The observer-tool comes with four synonyms (which have to match the settings
+in the config file - see below). The typical usage is to call
+'observer.hourly.pl' from /etc/cron.hourly, 'observer.daily.pl' from
+/etc/cron.daily and so on. The observer script should run under root
+privileges as it has to su to user accounts. In the user accounts it looks for
+observer scripts matching the given interval and executes them. It checks for
+the scripts or programs to match the UID of the user account and to be not
+writable by others. The observer tool collects reports from these scripts,
+sorts them within one report and logs the report. It may also send the report
+via e-mail to an admin.
+
+The config file defines the user accounts to include in the action. It has to
+be named $HOME/observer/observer.cfg or the name has to be provided in the
+environment variable $OBSERVER_CONFIG.
+
+Settings in observer.cfg:
+-------------------------
+$OBSERVER_CLIENT:
+  This is a hash table that defines the user accounts to include in the action
+  and defines the directories where to look for scripts or programs.
+
+$OBSERVER_OKREPORT:
+  This hash defines the callable intervals (hourly,...) and which report
+  levels should be mailed.
+
+$OBSERVER_NOTIFY:
+  This string variable defines to e-mail addresses of user to send the report
+  to.
+
+$OBSERVER_LOGDIR:
+  This string variable defines a log dir for the master logs.
+ 
+Below the directory defined in $OBSERVER_CLIENT the tool expects a
+subdirectory structure like this:
+
+  ./scripts
+  ./scripts/weekly
+  ./scripts/monthly
+  ./scripts/daily
+  ./scripts/hourly
+  ./log
+  ./log/weekly
+  ./log/monthly
+  ./log/daily
+  ./log/hourly
+
+Where it expects to find executable scripts in ./scripts/hourly, etc. The
+client service job scripts or programs have to be executable (file mode bit
+set) and must not end with '.bak'.
+
+The scripts and programs are called with the following environment variables
+set:
+  
+  OBS_CLIENT            the service client (i.e. the user that owns the script)
+  OBS_LOG_DIR           the proposed directory for user level log files
+  OBS_SCRIPT_DIR        the directory where the script was found
+  OBS_LOG               the full pathname of the proposed log file
+  OBS_SCRIPT            the full pathname of the script
+
+  OBS_KEY_STATUS        a string indicating a status level ('status:')
+  OBS_KEY_MESSAGE       a string indicating a status message ('message:')
+
+  OBS_KEY_OK            the ok level index ('O')
+  OBS_KEY_NOTICE        the notice level index ('N')
+  OBS_KEY_ALERT         the alert level index ('A')
+  
+  OBS_STATUS_OK         a full status level string ('status: O')
+  OBS_STATUS_NOTICE     a full status level string ('status: N')
+  OBS_STATUS_ALERT      a full status level string ('status: A')
+
+The status level indices ('ONA') are used to define report level to send via
+e-mail in $OBSERVER_OKREPORT.
+
+The client service script or program has to return a success or status message
+through stdout. It has to produce two lines in the following scheme:
+
+  echo $OBS_STATUS_OK
+  echo $OBS_KEY_MESSAGE this is an example message...
+
+These values will be used to create a quick status index of all service jobs.
+The idea of the three status levels is to give the admin an idea how to react:
+
+  OK:       the service was executed successfull, no further action is needed
+  NOTICE:   there happend something that is unusual, but is not dangerous;
+            please have a closer look
+  ALERT:    the service met an error condition, immediate action might be
+            required!
+
+In addition to the status level the client service may write more lines to
+stdout or stderr. All these lines will be catched and appended to the
+observer-tool log and report.
+
+It is up to the client service tool to create additional logs and reports. The
+preferred name for a report file is given in $OBS_LOG and will be unique to
+one run of the observer-tool (i.e. it has a time stamp in the file name that
+includes the hour at least).
+
+The observer_mkdir.pl tool
+--------------------------
+
+After setting up observer.cfg this tool will create all client directories
+that are expected by observer.pl.
+
+---- END OF FILE ----

@@ -1,0 +1,29 @@
+this is <README.history>
+============================================================================
+history of this repository
+--------------------------
+2015-05-18
+============================================================================
+Brief history
+-------------
+
+The contents of this repository previously were part of the TFSoftware
+repository. They were extracted into a git repository on 2015-05-18.
+
+----------------------------------------------------------------------------
+Milestones
+----------
+
+2000-02-09 Initial import to CVS repository
+           tag: thof_initial_commit
+
+2010-08-08 Conversion to subversion
+           tag: cvs-svn_conversion
+
+2014-01-01 Check-out with git-svn creating a gatekeeper repository
+           tag: git-svn_gatekeeper_clone
+  
+2015-05-18 Creation of git repository 
+           tags: surgery_*
+
+----- END OF README.history ----- 
