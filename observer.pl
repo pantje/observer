@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.4 2000-03-07 11:45:21 thof Exp $
+# $Id: observer.pl,v 1.5 2000-07-31 13:39:02 thof Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -21,13 +21,14 @@
 #                      (was not working in former version)
 #    22/02/00   V1.4   change to users home directory before calling /bin/su
 #    07/03/00   V1.5   now reports new lines
+#    31/07/00   V1.6   now uses /bin/bash as su login shell
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.5   central service";
+$VERSION="OBSERVER   V1.6   central service";
 
 # called program name
 # -------------------
@@ -232,7 +233,7 @@ foreach $client (keys(%OBSERVER_CLIENT)) {
     NOTICELOG("$client has UID $CLIENTUID!");
     $CALLCMD="$binBASH -c ";
   } else {
-    $CALLCMD="cd $CLIENTHOME; $binSU $client -c ";
+    $CALLCMD="cd $CLIENTHOME; $binSU $client -l -s $binBASH -c ";
   }
 
 # set directories

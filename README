@@ -108,6 +108,9 @@ preferred name for a report file is given in $OBS_LOG and will be unique to
 one run of the observer-tool (i.e. it has a time stamp in the file name that
 includes the hour at least).
 
+Starting with version 1.6 the observer call /bin/bash as login shell for its
+su-clients.
+
 The observer_mkdir.pl tool
 --------------------------
 
