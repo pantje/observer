@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.8 2000-08-15 08:21:54 thof Exp $
+# $Id: observer.pl,v 1.9 2000-08-15 08:23:31 thof Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -365,7 +365,7 @@ foreach $client (keys(%OBSERVER_CLIENT)) {
 @ltime=localtime;
 $logname=sprintf("%s/%s_%.4d_%.2d_%.2d_%.2d", 
   $OBSERVER_LOGDIR, $OBSERVER_INTERVAL,
-  $ltime[5]+1900, $ltime[4]+1, $ltime[3]+1, $ltime[2]);
+  $ltime[5]+1900, $ltime[4]+1, $ltime[3], $ltime[2]);
 $LOG_MASTER     ="$logname.log";
 $LOG_PREVSTATUS ="$OBSERVER_LOGDIR/prevstatus.$OBSERVER_INTERVAL.log";
 $LOG_STATUS     ="$logname.status";
