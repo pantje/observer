@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.5 2000-07-31 13:39:02 thof Exp $
+# $Id: observer.pl,v 1.6 2000-07-31 13:44:15 thof Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -233,7 +233,7 @@ foreach $client (keys(%OBSERVER_CLIENT)) {
     NOTICELOG("$client has UID $CLIENTUID!");
     $CALLCMD="$binBASH -c ";
   } else {
-    $CALLCMD="cd $CLIENTHOME; $binSU $client -l -s $binBASH -c ";
+    $CALLCMD="cd $CLIENTHOME; $binSU $client -p -l -s $binBASH -c ";
   }
 
 # set directories
