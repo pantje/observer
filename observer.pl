@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.2 2000-02-21 15:32:29 thof Exp $
+# $Id: observer.pl,v 1.3 2000-02-22 11:15:49 thof Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -19,13 +19,14 @@
 #    25/01/00   V1.2   changed reporting scheme
 #    21/02/00   V1.3   changed differences reporting scheme
 #                      (was not working in former version)
+#    22/02/00   V1.4   change to users home directory before calling /bin/su
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.3   central service";
+$VERSION="OBSERVER   V1.4   central service";
 
 # called program name
 # -------------------
@@ -224,12 +225,13 @@ foreach $client (keys(%OBSERVER_CLIENT)) {
 ##  for (@pwentries) { print "$_\n"; }
   $CLIENTUID=$pwentries[2];
   $CLIENTGID=$pwentries[3];
+  $CLIENTHOME=$pwentries[7];
 ##  print "$CLIENTUID $CLIENTGID\n";
   if ($CLIENTUID == 0) {
     NOTICELOG("$client has UID $CLIENTUID!");
     $CALLCMD="$binBASH -c ";
   } else {
-    $CALLCMD="$binSU $client -c ";
+    $CALLCMD="cd $CLIENTHOME; $binSU $client -c ";
   }
 
 # set directories
