@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.7 2000-07-31 13:45:35 thof Exp $
+# $Id: observer.pl,v 1.8 2000-08-15 08:21:54 thof Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -22,13 +22,14 @@
 #    22/02/00   V1.4   change to users home directory before calling /bin/su
 #    07/03/00   V1.5   now reports new lines
 #    31/07/00   V1.6   now uses /bin/bash as su login shell
+#    15/08/00   V1.7   day-value in tm struct has range from 1 to 31
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.6   central service";
+$VERSION="OBSERVER   V1.7   central service";
 
 # called program name
 # -------------------
@@ -280,7 +281,7 @@ foreach $client (keys(%OBSERVER_CLIENT)) {
     @ltime=localtime;
     $ENV{OBS_LOG}=sprintf("%s/%s_%.4d_%.2d_%.2d_%.2d.log", 
       $OBS_LOG_DIR, $script,
-      $ltime[5]+1900, $ltime[4]+1, $ltime[3]+1, $ltime[2]);
+      $ltime[5]+1900, $ltime[4]+1, $ltime[3], $ltime[2]);
 
 # initialize report variables
     $STATUS_LEVEL="";
