@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.3 2000-02-22 11:15:49 thof Exp $
+# $Id: observer.pl,v 1.4 2000-03-07 11:45:21 thof Exp $
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #
@@ -20,13 +20,14 @@
 #    21/02/00   V1.3   changed differences reporting scheme
 #                      (was not working in former version)
 #    22/02/00   V1.4   change to users home directory before calling /bin/su
+#    07/03/00   V1.5   now reports new lines
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.4   central service";
+$VERSION="OBSERVER   V1.5   central service";
 
 # called program name
 # -------------------
@@ -378,12 +379,18 @@ for $stline (@STATUS_REPORT) {
 # -----------------------------------
 @PREVIOUS_STATUS=();
 @STATUS_DIFF=();
+@STATUS_NEW=();
 if (-r $LOG_PREVSTATUS) {
   if (open(PREVSTATUS, "<$LOG_PREVSTATUS")) {
 # read previous
     @PREVIOUS_STATUS=(<PREVSTATUS>);
     close(PREVSTATUS);
     chomp(@PREVIOUS_STATUS);
+#
+# ---
+# create differences (what was in old status that is not in current one)
+# ---
+#
 # create a working copy of the current status
     @current_status=@STATUS_FILE;
 # take each line of previous status
@@ -408,13 +415,48 @@ if (-r $LOG_PREVSTATUS) {
     } else {
       $DIFFERENCES=1;
     }
+#
+# ---
+# create new (what was in current status that is not in old one)
+# ---
+#
+# create a working copy of the current status
+    @current_status=@STATUS_FILE;
+    @previous_status=@PREVIOUS_STATUS;
+# take each line of previous status
+    foreach $stline (sort (@current_status)) {
+# remember line and remove meta characters
+      $orline = $stline;
+      $stline =~ tr/*.?+//d;
+##      print "$stline\n";
+# search for this pattern in current status
+# the extra '$_' is necessary as map evaluates in list context
+# without map would return the number of tr-substitutions
+      @matching=grep { m/^$stline$/ } map { tr/*.?+//d; $_; }
+        (@previous_status);
+##      print "$#matching\n";
+      if ($#matching < 0) {
+        push @STATUS_NEW, $orline;
+      }
+    }
+# so, are there any differences now?
+    if ($#STATUS_NEW < 0) {
+      $NEW=0;
+      @STATUS_NEW="none"; i
+    } else {
+      $NEW=1;
+    }
   } else {
     @STATUS_DIFF=("could not open $LOG_PREVSTATUS: $!");
     ERRLOG(@STATUS_DIFF);
+    @STATUS_NEW=@STATUS_FILE;
+    $NEW=1;
   } # if open
 } else {
   @STATUS_DIFF=("There was no previous status log found...");
   ERRLOG(@STATUS_DIFF);
+  @STATUS_NEW=@STATUS_FILE;
+  $NEW=1;
 } # if -r
 
 $now_time=localtime;
@@ -500,15 +542,27 @@ if ($mail_level_indices =~ m/$master_level_index/) {
    sprintf("%.10s: Exit status (%s: OK; %s: NOTICE; %s: ALERT)",
      "S", $STATUS_OK, $STATUS_NOTICE, $STATUS_ALERT), " ");
 
-if ($DIFFERENCES) {
+if ($NEW) {
   push @OBSERVER_REPORT,
-    ("DIFFERENCES TO PREVIOUS RUN:",
-     "(i.e. lines that appeared in previous one but not in this one)",
-     @STATUS_HEAD, @STATUS_DIFF, " ", "This run:");
+    ("NEW LINES IN CURRENT RUN:",
+     "(i.e. lines that appeared in current one but not in previous one)",
+     @STATUS_HEAD, @STATUS_NEW, " ", "This run:");
 }
 
 push @OBSERVER_REPORT,
   (@STATUS_HEAD, @STLINES_ALERT, @STLINES_NOTICE, @STLINES_OK);
+
+if ($DIFFERENCES) {
+  push @OBSERVER_REPORT,
+    (" ","DIFFERENCES TO PREVIOUS RUN:",
+     "(i.e. lines that appeared in previous one but not in this one)",
+     @STATUS_HEAD, @STATUS_DIFF);
+}
+
+if (! $NEW) {
+  push @OBSERVER_REPORT,
+  (" ","No new lines compared to previous run...");
+}
 
 if (! $DIFFERENCES) {
   push @OBSERVER_REPORT,
