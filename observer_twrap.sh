@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is <observer_twrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_twrap.sh,v 1.1 2003-06-22 15:53:13 tforb Exp $
+# $Id: observer_twrap.sh,v 1.2 2003-06-22 15:55:07 tforb Exp $
 # 
 # Copyright (c) 2003 by Thomas Forbriger (BFO Schiltach) 
 # 
@@ -51,7 +51,7 @@ export  OBS_STATUS_ALERT="$OBS_KEY_STATUS $OBS_KEY_ALERT"
 
 OBS_WRAP_OUTLOG=$OBS_LOG_DIR/stderr.out
 
-echo "This is "'$Id: observer_twrap.sh,v 1.1 2003-06-22 15:53:13 tforb Exp $'
+echo "This is "'$Id: observer_twrap.sh,v 1.2 2003-06-22 15:55:07 tforb Exp $'
 echo "======================================================================"
 echo "wrapped plugin: $OBS_WRAP_PLUGIN"
 echo
@@ -64,9 +64,11 @@ echo  OBS_SCRIPT=$OBS_WRAP_PLUGIN
 echo
 
 # go
+OBS_WRAP_START=$(date)
 /bin/mkdir -pv $OBS_WRAP_LOGDIR
 echo "$OBS_WRAP_PLUGIN >$OBS_WRAP_OUTLOG 2>&1"
 $OBS_WRAP_PLUGIN >$OBS_WRAP_OUTLOG 2>&1
+OBS_WRAP_FINISH=$(date)
 
 # report
 echo 
@@ -74,12 +76,19 @@ echo "logfile $OBS_LOG:"
 echo "---------------------------------------------"
 /bin/cat $OBS_LOG
 echo 
+echo "--------------------------"
 echo "output passed to observer:"
 echo "--------------------------"
 /bin/cat $OBS_WRAP_OUTLOG | egrep -v "^(status|message): " 
 echo 
+echo "-------------------------------"
 echo "output interpreted by observer:"
-echo "---------------------------------------------"
+echo "-------------------------------"
 /bin/cat $OBS_WRAP_OUTLOG | egrep "^(status|message): " 
+
+echo
+echo "======================================================================="
+echo " script started: $OBS_WRAP_START"
+echo "script finished: $OBS_WRAP_FINISH"
 
 # ----- END OF observer_twrap.sh ----- 
