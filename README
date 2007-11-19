@@ -1,5 +1,21 @@
+this is <README>
+============================================================================
+$Id: README,v 1.3 2007-11-19 17:19:58 tforb Exp $
+============================================================================
 Observer Service Tool (Jan. 2000 Thomas Forbriger IfG Stuttgart)
 =====================
+
+The observer service tool is used as a wrapper for hourly, daily, weekly, and
+monthly cron-jobs. The observer service tool is able to execute cronjobs for
+several different users on the system using their privileges only. The output
+of these cron-jobs is summarized. You will receive one single email from the
+observer service tool that provides a short summary of the executed tasks,
+which quickly informs you about differences to the previous execution of the
+task, normal operation or exceptions or errors during execution of individual
+scripts. The full output of the cron-jobs is appended to this email and
+additional log files may be created by the tasks in dedicated directories.
+
+----------------------------------------------------------------------------
 
    observer.cfg
 
@@ -117,4 +133,4 @@ The observer_mkdir.pl tool
 After setting up observer.cfg this tool will create all client directories
 that are expected by observer.pl.
 
----- END OF FILE ----
+----- END OF README ----- 

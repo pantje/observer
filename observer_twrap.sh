@@ -1,11 +1,27 @@
 #!/bin/sh
 # this is <observer_twrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_twrap.sh,v 1.4 2003-08-19 07:16:50 tforb Exp $
+# $Id: observer_twrap.sh,v 1.5 2007-11-19 17:19:58 tforb Exp $
 # 
 # Copyright (c) 2003 by Thomas Forbriger (BFO Schiltach) 
 # 
 # test wrapper for observer plugins
+#
+# ----
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version. 
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# ----
 # 
 # REVISIONS and CHANGES 
 #    22/06/2003   V1.0   Thomas Forbriger
@@ -52,7 +68,7 @@ export  OBS_STATUS_ALERT="$OBS_KEY_STATUS $OBS_KEY_ALERT"
 
 OBS_WRAP_OUTLOG=$OBS_LOG_DIR/stderr.out
 
-echo "This is "'$Id: observer_twrap.sh,v 1.4 2003-08-19 07:16:50 tforb Exp $'
+echo "This is "'$Id: observer_twrap.sh,v 1.5 2007-11-19 17:19:58 tforb Exp $'
 echo "======================================================================"
 echo "wrapped plugin: $OBS_WRAP_PLUGIN"
 echo
