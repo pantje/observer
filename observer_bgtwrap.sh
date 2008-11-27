@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is <observer_bgtwrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_bgtwrap.sh,v 1.3 2008-11-27 21:28:44 tforb Exp $
+# $Id: observer_bgtwrap.sh,v 1.4 2008-11-27 21:37:32 tforb Exp $
 # 
 # Copyright (c) 2008 by Thomas Forbriger (BFO Schiltach) 
 # 
@@ -47,7 +47,9 @@ do
       echo "-------------------------------"; \
       echo ; \
       /bin/cat $LOGFILE | egrep "^(status|message): "; \
-      cat $LOGFILE ) | mail -s "$(basename $0) $(basename $PLUGIN)" $USER
+      echo;  \
+      cat $LOGFILE; \
+      echo ) | mail -s "$(basename $0) $(basename $PLUGIN)" $USER
   else
     echo $PLUGIN | mail -s "ERROR: plugin $(basename $PLUGIN) not executable" $USER
   fi
