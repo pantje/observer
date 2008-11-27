@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is <observer_bgtwrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_bgtwrap.sh,v 1.2 2008-11-27 21:20:12 tforb Exp $
+# $Id: observer_bgtwrap.sh,v 1.3 2008-11-27 21:28:44 tforb Exp $
 # 
 # Copyright (c) 2008 by Thomas Forbriger (BFO Schiltach) 
 # 
@@ -35,7 +35,7 @@ then
   exit 3
 fi
 
-while test -n $1
+while test -n "$1"
 do
   PLUGIN=$1
   if test -x $PLUGIN
