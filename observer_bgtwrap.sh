@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is <observer_bgtwrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_bgtwrap.sh,v 1.1 2008-11-27 20:47:26 tforb Exp $
+# $Id: observer_bgtwrap.sh,v 1.2 2008-11-27 21:20:12 tforb Exp $
 # 
 # Copyright (c) 2008 by Thomas Forbriger (BFO Schiltach) 
 # 
@@ -12,6 +12,10 @@
 # 
 # ============================================================================
 #
+
+OBS_WRAP_LOGDIR=$HOME/tmp/observer
+mkdir -pv $OBS_WRAP_LOGDIR
+LOGFILE=$OBS_WRAP_LOGDIR/bgwrapper.log
 
 if test $# -lt 1 
 then
@@ -31,11 +35,24 @@ then
   exit 3
 fi
 
-while test -x $1
+while test -n $1
 do
   PLUGIN=$1
-  $WRAPPER $PLUGIN 2>&1 | mail -s "$(basename $0) $PLUGIN" $USER
+  if test -x $PLUGIN
+  then
+    $WRAPPER $PLUGIN 2>&1 >$LOGFILE
+    ( echo ; \
+      echo "-------------------------------"; \
+      echo "output interpreted by observer:"; \
+      echo "-------------------------------"; \
+      echo ; \
+      /bin/cat $LOGFILE | egrep "^(status|message): "; \
+      cat $LOGFILE ) | mail -s "$(basename $0) $(basename $PLUGIN)" $USER
+  else
+    echo $PLUGIN | mail -s "ERROR: plugin $(basename $PLUGIN) not executable" $USER
+  fi
   shift
+  exit
 done
 
 # ----- END OF observer_bgtwrap.sh ----- 
