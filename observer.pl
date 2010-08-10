@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 #
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id: observer.pl,v 1.11 2007-11-19 17:19:58 tforb Exp $
+# $Id$
 #
 # 17/01/00 by Thomas Forbriger (IfG Stuttgart)
 #

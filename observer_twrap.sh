@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is <observer_twrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_twrap.sh,v 1.5 2007-11-19 17:19:58 tforb Exp $
+# $Id$
 # 
 # Copyright (c) 2003 by Thomas Forbriger (BFO Schiltach) 
 # 
@@ -68,7 +68,7 @@ export  OBS_STATUS_ALERT="$OBS_KEY_STATUS $OBS_KEY_ALERT"
 
 OBS_WRAP_OUTLOG=$OBS_LOG_DIR/stderr.out
 
-echo "This is "'$Id: observer_twrap.sh,v 1.5 2007-11-19 17:19:58 tforb Exp $'
+echo "This is "'$Id$'
 echo "======================================================================"
 echo "wrapped plugin: $OBS_WRAP_PLUGIN"
 echo
