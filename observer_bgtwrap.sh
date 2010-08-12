@@ -1,7 +1,7 @@
 #!/bin/sh
 # this is <observer_bgtwrap.sh>
 # ----------------------------------------------------------------------------
-# $Id: observer_bgtwrap.sh,v 1.4 2008-11-27 21:37:32 tforb Exp $
+# $Id$
 # 
 # Copyright (c) 2008 by Thomas Forbriger (BFO Schiltach) 
 # 
