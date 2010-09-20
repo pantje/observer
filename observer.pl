@@ -40,13 +40,15 @@
 #    31/07/00   V1.6   now uses /bin/bash as su login shell
 #    15/08/00   V1.7   day-value in tm struct has range from 1 to 31
 #    09/05/03   V1.8   logger now sits in /bin
+#    20/09/10   V1.9   using function defined on a hash is deprecated
+#                      using if instead
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.8   central service";
+$VERSION="OBSERVER   V1.9   central service";
 
 # called program name
 # -------------------
@@ -197,9 +199,9 @@ LOG "entered $VERSION";
 
 # check definitions
 # -----------------
-unless ( defined %OBSERVER_CLIENT ) {
+if (! (%OBSERVER_CLIENT)) {
   FATAL_ERROR("config hash \$OBSERVER_CLIENT undefined!"); }
-unless ( defined %OBSERVER_OKREPORT ) {
+if (! (%OBSERVER_OKREPORT)) {
   FATAL_ERROR("config hash \$OBSERVER_OKREPORT undefined!"); }
 unless ( defined $OBSERVER_NOTIFY ) {
   FATAL_ERROR("config variable \$OBSERVER_NOTIFY undefined!"); }
