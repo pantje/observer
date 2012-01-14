@@ -42,13 +42,14 @@
 #    09/05/03   V1.8   logger now sits in /bin
 #    20/09/10   V1.9   using function defined on a hash is deprecated
 #                      using if instead
+#    14/01/12   V1.10  lexically sort script names before execution
 #
 # ============================================================================
 #
 # we aren't using Sys::Syslog as I did not managed to get any message through
 #use Sys::Syslog;
 
-$VERSION="OBSERVER   V1.9   central service";
+$VERSION="OBSERVER   V1.10  central service";
 
 # called program name
 # -------------------
@@ -277,9 +278,9 @@ foreach $client (keys(%OBSERVER_CLIENT)) {
     } readdir(scriptdir);
   closedir(scriptdir);
 
-# cycle thorugh scripts
+# cycle through scripts
 # ---------------------
-  foreach $script (@scripts) {
+  foreach $script (sort(@scripts)) {
 
 # check script for correct file attributes
     CHECK_FILE($client, $CLIENTUID, $CLIENTGID, "$OBS_SCRIPT_DIR/$script");
