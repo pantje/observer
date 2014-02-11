@@ -5,17 +5,17 @@
 # $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
 # $Id$
 #
-# 17/01/00 by Thomas Forbriger (IfG Stuttgart)
+# Copyright (c) 2000, 2003, 20012 by Thomas Forbriger (IfG Stuttgart)
 #
 # This is the main tool for observing services
 #
 # ----
-# This program is free software; you can redistribute it and/or modify
+# observer.pl is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version. 
 # 
-# This program is distributed in the hope that it will be useful,
+# observer.pl is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.

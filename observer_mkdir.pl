@@ -2,7 +2,7 @@
 # this is <observer_mkdir.pl>
 # ----------------------------------------------------------------------------
 #
-# 18/01/00 by Thomas Forbriger (IfG Stuttgart)
+# Copytight 2000 (c) by Thomas Forbriger (IfG Stuttgart)
 #
 # create client directory structure for observer.pl
 #
