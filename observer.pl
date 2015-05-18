@@ -2,9 +2,6 @@
 # this is <observer.pl>
 # ----------------------------------------------------------------------------
 #
-# $Source: /home/tforb/svnbuild/cvssource/CVS/thof/scr/adm/observer/observer.pl,v $
-# $Id$
-#
 # Copyright (c) 2000, 2003, 20012 by Thomas Forbriger (IfG Stuttgart)
 #
 # This is the main tool for observing services
